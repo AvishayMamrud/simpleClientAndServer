@@ -121,7 +121,6 @@ void* readAndRespond(void* con){
     }
 
     buffer[bytesRead] = '\0';
-    // while (bytesRead > 0 && (buffer[bytesRead-1] == '\n' || buffer[bytesRead-1] == '\r')) buffer[--bytesRead] = '\0';
     
     cout << "The message was: " << bytesRead << " - " << buffer << endl;
 
@@ -141,12 +140,12 @@ void* readAndRespond(void* con){
     cout << "the complete file content is in memory" << endl;
 
     string str = memblock;
-    string response = "HTTP/1.0 200 OK\r\n\r\n" + str;//"what the hell is - " + (string)buffer + '\n';
+    string response = "what the hell is - " + (string)buffer + '\n';//"HTTP/1.0 200 OK\r\n\r\n" + str;//
     delete[] memblock;
     
     cout << endl << response << endl << endl;
     send(connection, response.c_str(), response.size(), 0);
-
+    while (bytesRead > 0 && (buffer[bytesRead-1] == '\n' || buffer[bytesRead-1] == '\r')) buffer[--bytesRead] = '\0';
     if(((string)"quit").compare((string)buffer) == 0){
       cout << "quitting..." << endl;
       break;
